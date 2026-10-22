@@ -41,48 +41,14 @@ $riskColor = match($result['risk_level']) {
 };
 $loadCharts  = true;
 $pageTitle   = $result['model_name'].' – Your Results';
-// Prepare the data for JavaScript
-// 1. Prepare data
-$chartConfig = [
-    'radar' => [
-        'labels'      => $dims,
-        'userScores'  => $userDat,
-        'modelScores' => $modelDat,
-        'modelName'   => $result['model_name']
-    ],
-    'bar' => [
-        'labels' => array_column($top3, 'name'),
-        'scores' => array_column($top3, 'confidence')
-    ]
-];
-
-// 2. Create the script
-$inlineScript = '
-    document.addEventListener("DOMContentLoaded", () => {
-        const data = ' . json_encode($chartConfig) . ';
-        if (window.Charts) {
-            Charts.init(data);
-        } else {
-            console.error("Custom charts.js logic not found! Make sure /js/charts.js is loaded.");
-        }
-    });
-';
-
-// This creates the JavaScript command
-$inlineScript = '
-   const chartData = ' . json_encode($chartConfig) . ';
-   document.addEventListener("DOMContentLoaded", () => {
-       if (typeof Charts !== "undefined") {
-           Charts.init(chartData.radar, chartData.bar);
-       } else {
-           console.error("Charts.js library not loaded!");
-       }
-   });
-';
+$inlineScript = 'const BP = window.BASE_PATH || '';
+document.addEventListener("DOMContentLoaded",()=>{Charts.init(' . json_encode([
+    'radar' => ['labels'=>$dims,'userScores'=>$userDat,'modelScores'=>$modelDat,'modelName'=>$result['model_name']],
+    'bar'   => ['labels'=>array_column($top3,'name'),'scores'=>array_column($top3,'confidence')],
+]) . ');});';
+require_once ROOT_PATH . '/includes/header.php';
 ?>
 
-
-<?php require_once ROOT_PATH . '/includes/header.php'; ?>
 <div class="container" style="padding-top:48px;padding-bottom:80px">
 
   <!-- Header -->
@@ -187,10 +153,7 @@ $inlineScript = '
     <a href="<?= url('/dashboard.php') ?>" class="btn btn-primary">📊 My Dashboard</a>
     <?php endif; ?>
   </div>
+
 </div>
 
-<script>
-<?= $inlineScript ?>
-</script>
 <?php require_once ROOT_PATH . '/includes/footer.php'; ?>
-

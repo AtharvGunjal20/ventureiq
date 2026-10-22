@@ -15,13 +15,7 @@
 
 <!-- Main JS — BASE_PATH-aware -->
 <script src="<?= BASE_PATH ?>/js/app.js"></script>
-<script src="<?= BASE_PATH ?>/js/app.js"></script>
 
-<script src="<?= BASE_PATH ?>/js/charts.js"></script>
-
-<?php if (!empty($inlineScript)): ?>
-<script><?= $inlineScript ?></script>
-<?php endif; ?>
 <?php if (!empty($inlineScript)): ?>
 <script><?= $inlineScript ?></script>
 <?php endif; ?>

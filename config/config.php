@@ -12,15 +12,14 @@ define('APP_ENV',     'development');
 // ── SET YOUR BASE PATH HERE ──────────────────────────────────
 // localhost with XAMPP:  '/ventureiq/public'
 // Live domain root:      ''
-define('BASE_PATH', '/ventureiq/public');
-define('APP_URL',   'http://localhost' . BASE_PATH);  // ← ADD THIS LINE HERE
+define('BASE_PATH', '');
 
 // ── Database ─────────────────────────────────────────────────
-define('DB_HOST',    'localhost');
-define('DB_NAME',    'ventureiq');
-define('DB_USER',    'root');
-define('DB_PASS',    '');
-define('DB_PORT',    3306);
+define('DB_HOST', getenv('DB_HOST') ?: 'db');
+define('DB_NAME', getenv('DB_NAME') ?: 'ventureiq');
+define('DB_USER', getenv('DB_USER') ?: 'ventureuser');
+define('DB_PASS', getenv('DB_PASS') ?: 'change_this_password');
+define('DB_PORT', (int)(getenv('DB_PORT') ?: 3306));
 define('DB_CHARSET', 'utf8mb4');
 
 // ── Paths (filesystem) ───────────────────────────────────────

@@ -140,7 +140,7 @@ require_once ROOT_PATH . '/includes/header.php';
         echo '<span class="badge badge-amber">'.htmlspecialchars($bestResult['roi_label']).' ROI</span>';
         ?>
       </div>
-      <a href="<?= url('/results.php?id=' . htmlspecialchars($r['uuid'])) ?>"
+      <a href="/results.php?id=<?= htmlspecialchars($bestResult['uuid']) ?>"
          class="btn btn-primary" style="width:100%;justify-content:center">View Full Report →</a>
     </div>
     <?php endif; ?>
@@ -148,8 +148,8 @@ require_once ROOT_PATH . '/includes/header.php';
 
   <!-- Quick Actions -->
   <div style="display:flex;gap:12px;flex-wrap:wrap">
-    <a href="<?= url('/results.php?id=' . htmlspecialchars($r['uuid'])) ?>"
-    <a href="<?= url('/results.php?id=' . htmlspecialchars($bestResult['uuid'])) ?>"
+    <a href="<?= url('/quiz.php') ?>"    class="btn btn-ghost">🔄 Retake Quiz</a>
+    <a href="<?= url('/explore.php') ?>" class="btn btn-ghost">🗂 Explore Models</a>
     <a href="<?= url('/profile.php') ?>" class="btn btn-ghost">👤 Edit Profile</a>
   </div>
 

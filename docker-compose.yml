@@ -1,0 +1,29 @@
+
+services:
+  web:
+    build: .
+    ports:
+      - "8080:80"
+    depends_on:
+      db:
+        condition: service_healthy
+
+  db:
+    image: mysql:8.0
+    restart: unless-stopped
+    environment:
+      MYSQL_ROOT_PASSWORD: change_this_root_password
+      MYSQL_DATABASE: ventureiq
+      MYSQL_USER: ventureuser
+      MYSQL_PASSWORD: change_this_password
+    volumes:
+      - mysql_data:/var/lib/mysql
+      - ./config/schema.sql:/docker-entrypoint-initdb.d/01-schema.sql:ro
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-u", "root", "-pchange_this_root_password"]
+      interval: 5s
+      timeout: 5s
+      retries: 20
+
+volumes:
+  mysql_data:

@@ -142,8 +142,8 @@ VALUES
 
 ('subscription','Subscription Box','📬','Curated physical products delivered monthly. Build recurring revenue and a loyal brand community.',
  'medium',5000,25000,'High','Medium','4–8 months','Medium','High',
+ '["Subscription box","Recurring revenue","Brand community"]',
  '["Define niche and target persona","Source 5–7 signature products, negotiate minimums","Build waitlist landing page + social presence","Launch Kickstarter or pre-sell 50 boxes","Ship first box and film unboxing content","Focus on churn reduction — referrals & community"]',
- '["Subscription models reward creativity and community-building. Your profile shows strong creative inclination and willingness for medium capital outlay."]',
  'Subscription models reward creativity and community-building. Your profile shows strong creative inclination and medium capital tolerance.',
  3,3,2,3,2,4,2,2),
 

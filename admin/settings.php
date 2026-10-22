@@ -1,10 +1,4 @@
 <?php
-require_once __DIR__ . '/../../config/config.php';
-require_once __DIR__ . '/../../config/db.php';
-require_once __DIR__ . '/../../includes/helpers.php';
-
-// ... rest of your file
-<?php
 if (!defined('ROOT_PATH')) define('ROOT_PATH', dirname(dirname(__DIR__)));
 require_once ROOT_PATH . '/includes/helpers.php';
 session_secure_start();
