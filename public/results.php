@@ -1,6 +1,6 @@
 <?php
 // ============================================================
-//  VentureIQ â€“ Results Dashboard
+//  VentureIQ – Results Dashboard
 // ============================================================
 if (!defined('ROOT_PATH')) define('ROOT_PATH', dirname(dirname(__FILE__)));
 if (!defined('BASE_PATH') && file_exists(dirname(dirname(__FILE__)) . '/config/config.php')) require_once dirname(dirname(__FILE__)) . '/config/config.php';
@@ -47,7 +47,7 @@ $riskColor = match ($result['risk_level']) {
 };
 
 $loadCharts = true;
-$pageTitle = $result['model_name'] . ' â€“ Your Results';
+$pageTitle = $result['model_name'] . ' – Your Results';
 
 // FIX: Use double quotes for the JavaScript empty string
 $inlineScript = 'const BP = window.BASE_PATH || ""; 
@@ -75,7 +75,7 @@ require_once ROOT_PATH . '/includes/header.php';
     <h1 style="margin-bottom:10px"><?= htmlspecialchars($result['emoji']) ?> <?= htmlspecialchars($result['model_name']) ?></h1>
     <p style="font-size:1rem">
       <span style="background:linear-gradient(135deg,#7c6dfa,#00d4aa);-webkit-background-clip:text;-webkit-text-fill-color:transparent;font-weight:700;font-size:1.2rem"><?= $result['confidence_pct'] ?>% confidence match</span>
-      &nbsp;Â·&nbsp; Based on your 7-dimension profile
+      &nbsp;·&nbsp; Based on your 7-dimension profile
     </p>
   </div>
 
@@ -89,11 +89,11 @@ require_once ROOT_PATH . '/includes/header.php';
 
     <!-- Meta pills -->
     <div style="display:flex;gap:10px;flex-wrap:wrap;margin-bottom:24px">
-      <span class="badge badge-<?= $riskColor ?>">â— <?= htmlspecialchars($result['risk_level']) ?> Risk</span>
-      <span class="badge badge-cyan">ðŸ’° $<?= number_format($result['investment_min']) ?>â€“$<?= number_format($result['investment_max']) ?></span>
-      <span class="badge badge-purple">â³ <?= htmlspecialchars($result['time_to_profit']) ?></span>
-      <span class="badge badge-amber">ðŸ“ˆ <?= htmlspecialchars($result['roi_label']) ?> ROI</span>
-      <span class="badge badge-green">âš™ <?= htmlspecialchars($result['tech_level']) ?> Tech</span>
+      <span class="badge badge-<?= $riskColor ?>">● <?= htmlspecialchars($result['risk_level']) ?> Risk</span>
+      <span class="badge badge-cyan">💰 $<?= number_format($result['investment_min']) ?>–$<?= number_format($result['investment_max']) ?></span>
+      <span class="badge badge-purple">⏳ <?= htmlspecialchars($result['time_to_profit']) ?></span>
+      <span class="badge badge-amber">📈 <?= htmlspecialchars($result['roi_label']) ?> ROI</span>
+      <span class="badge badge-green">⚙ <?= htmlspecialchars($result['tech_level']) ?> Tech</span>
     </div>
 
     <!-- Tags -->
@@ -124,7 +124,7 @@ require_once ROOT_PATH . '/includes/header.php';
   <!-- Charts Row -->
   <div style="display:grid;grid-template-columns:1fr 1fr;gap:20px;margin-bottom:20px">
     <div class="card" style="padding:24px">
-      <div style="font-size:.78rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--text3);margin-bottom:16px">ðŸ“¡ Profile Match Radar</div>
+      <div style="font-size:.78rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--text3);margin-bottom:16px">📡 Profile Match Radar</div>
       <div style="position:relative;height:240px">
         <canvas id="radarChart" role="img" aria-label="Radar chart comparing your profile to <?= htmlspecialchars($result['model_name']) ?>"></canvas>
       </div>
@@ -135,7 +135,7 @@ require_once ROOT_PATH . '/includes/header.php';
     </div>
 
     <div class="card" style="padding:24px">
-      <div style="font-size:.78rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--text3);margin-bottom:16px">ðŸ“Š Top 3 Model Confidence</div>
+      <div style="font-size:.78rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--text3);margin-bottom:16px">📊 Top 3 Model Confidence</div>
       <div style="position:relative;height:240px">
         <canvas id="barChart" role="img" aria-label="Bar chart of top 3 recommended models by confidence"></canvas>
       </div>
@@ -145,7 +145,7 @@ require_once ROOT_PATH . '/includes/header.php';
   <!-- Alternatives -->
   <?php if ($alts): ?>
   <div class="card" style="margin-bottom:24px">
-    <div style="font-size:.78rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--text3);margin-bottom:16px">ðŸ”„ Top Alternatives For You</div>
+    <div style="font-size:.78rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--text3);margin-bottom:16px">🔄 Top Alternatives For You</div>
     <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:12px">
       <?php foreach ($alts as $alt):
           $altModel = DB::one('SELECT * FROM business_models WHERE id=?', [$alt['id']]);
@@ -154,7 +154,7 @@ require_once ROOT_PATH . '/includes/header.php';
       <div class="card" style="padding:16px;cursor:pointer" onclick="window.location='/explore.php#<?= htmlspecialchars($altModel['slug']) ?>'">
         <div style="font-size:1.4rem;margin-bottom:8px"><?= htmlspecialchars($altModel['emoji']) ?></div>
         <div style="font-size:.92rem;font-weight:600;margin-bottom:4px"><?= htmlspecialchars($altModel['name']) ?></div>
-        <div style="font-size:.75rem;color:var(--text3);margin-bottom:8px"><?= $alt['confidence'] ?>% match Â· <?= htmlspecialchars($altModel['risk_level']) ?> risk</div>
+        <div style="font-size:.75rem;color:var(--text3);margin-bottom:8px"><?= $alt['confidence'] ?>% match · <?= htmlspecialchars($altModel['risk_level']) ?> risk</div>
         <div class="score-bar"><div class="score-fill" data-width="<?= $alt['confidence'] ?>" style="width:0"></div></div>
       </div>
       <?php endforeach; ?>
@@ -164,13 +164,13 @@ require_once ROOT_PATH . '/includes/header.php';
 
   <!-- Actions -->
   <div style="display:flex;gap:12px;flex-wrap:wrap">
-    <a href="<?= url('/quiz.php') ?>" class="btn btn-ghost">ðŸ”„ Retake Quiz</a>
-    <a href="<?= url('/explore.php') ?>" class="btn btn-ghost">ðŸ—‚ Explore All Models</a>
-    <button onclick="window.print()" class="btn btn-outline">ðŸ–¨ Print / Save PDF</button>
+    <a href="<?= url('/quiz.php') ?>" class="btn btn-ghost">🔄 Retake Quiz</a>
+    <a href="<?= url('/explore.php') ?>" class="btn btn-ghost">🗂 Explore All Models</a>
+    <button onclick="window.print()" class="btn btn-outline">🖨 Print / Save PDF</button>
     <?php if (!is_logged_in()): ?>
-    <a href="<?= url('/register.php') ?>" class="btn btn-primary">ðŸ’¾ Save Results â€” Free</a>
+    <a href="<?= url('/register.php') ?>" class="btn btn-primary">💾 Save Results — Free</a>
     <?php else: ?>
-    <a href="<?= url('/dashboard.php') ?>" class="btn btn-primary">ðŸ“Š My Dashboard</a>
+    <a href="<?= url('/dashboard.php') ?>" class="btn btn-primary">📊 My Dashboard</a>
     <?php endif; ?>
   </div>
 
