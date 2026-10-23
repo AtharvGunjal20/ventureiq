@@ -1,8 +1,6 @@
-```php
+﻿```php
 <?php
-// ============================================================
 // VentureIQ - Core Helpers
-// ============================================================
 
 if (!defined('ROOT_PATH')) {
     require_once dirname(__DIR__) . '/config/config.php';
@@ -10,18 +8,15 @@ if (!defined('ROOT_PATH')) {
 
 require_once ROOT_PATH . '/config/db.php';
 
-// ── Session ───────────────────────────────────────────────────
 function session_secure_start(): void
 {
-    // Do not restart a session that is already active.
     if (session_status() === PHP_SESSION_ACTIVE) {
         return;
     }
 
-    // Do not attempt to configure a session after output has started.
     if (headers_sent($file, $line)) {
         error_log(
-            "VentureIQ: Cannot start session; output started in {$file} on line {$line}"
+            "VentureIQ: Output started in {$file} on line {$line}; session cannot start."
         );
         return;
     }
@@ -31,10 +26,10 @@ function session_secure_start(): void
 
         session_set_cookie_params([
             'lifetime' => SESSION_LIFETIME,
-            'path'     => '/',
+            'path' => '/',
             'httponly' => true,
             'samesite' => 'Lax',
-            'secure'   => (
+            'secure' => (
                 !empty($_SERVER['HTTPS']) &&
                 $_SERVER['HTTPS'] !== 'off'
             ),
@@ -44,7 +39,6 @@ function session_secure_start(): void
     }
 }
 
-// ── CSRF ─────────────────────────────────────────────────────
 function csrf_token(): string
 {
     session_secure_start();
@@ -87,7 +81,6 @@ function csrf_verify(): bool
         && hash_equals($storedToken, $token);
 }
 
-// ── Authentication ───────────────────────────────────────────
 function auth_user(): ?array
 {
     session_secure_start();
@@ -126,9 +119,6 @@ function require_admin(): void
     }
 }
 
-// ── Redirect ─────────────────────────────────────────────────
-// Always pass a root-relative path like '/login.php'.
-// BASE_PATH is added automatically by url().
 function redirect(string $path, int $code = 302): never
 {
     if (
@@ -143,13 +133,11 @@ function redirect(string $path, int $code = 302): never
     exit;
 }
 
-// ── Rate Limiting ────────────────────────────────────────────
 function rate_check(string $ip, string $action = 'login'): bool
 {
     try {
         DB::run(
-            'DELETE FROM rate_limit
-             WHERE window_start < DATE_SUB(NOW(), INTERVAL ? SECOND)',
+            'DELETE FROM rate_limit WHERE window_start < DATE_SUB(NOW(), INTERVAL ? SECOND)',
             [LOGIN_WINDOW_SECS]
         );
 
@@ -160,11 +148,9 @@ function rate_check(string $ip, string $action = 'login'): bool
 
         if (!$row) {
             DB::run(
-                'INSERT INTO rate_limit (ip_address, action, attempts)
-                 VALUES (?,?,1)',
+                'INSERT INTO rate_limit (ip_address, action, attempts) VALUES (?,?,1)',
                 [$ip, $action]
             );
-
             return true;
         }
 
@@ -173,9 +159,7 @@ function rate_check(string $ip, string $action = 'login'): bool
         }
 
         DB::run(
-            'UPDATE rate_limit
-             SET attempts=attempts+1
-             WHERE ip_address=? AND action=?',
+            'UPDATE rate_limit SET attempts=attempts+1 WHERE ip_address=? AND action=?',
             [$ip, $action]
         );
 
@@ -193,11 +177,10 @@ function rate_reset(string $ip, string $action = 'login'): void
             [$ip, $action]
         );
     } catch (Exception $e) {
-        // Ignore audit/rate-limit cleanup errors.
+        // Ignore rate-limit cleanup errors.
     }
 }
 
-// ── reCAPTCHA ────────────────────────────────────────────────
 function recaptcha_verify(string $token): bool
 {
     if (RECAPTCHA_SECRET_KEY === 'YOUR_SECRET_KEY_HERE') {
@@ -214,9 +197,9 @@ function recaptcha_verify(string $token): bool
 
     curl_setopt_array($ch, [
         CURLOPT_RETURNTRANSFER => true,
-        CURLOPT_POST           => true,
-        CURLOPT_POSTFIELDS     => http_build_query([
-            'secret'   => RECAPTCHA_SECRET_KEY,
+        CURLOPT_POST => true,
+        CURLOPT_POSTFIELDS => http_build_query([
+            'secret' => RECAPTCHA_SECRET_KEY,
             'response' => $token,
             'remoteip' => client_ip(),
         ]),
@@ -236,7 +219,6 @@ function recaptcha_verify(string $token): bool
         && ($data['score'] ?? 0) >= RECAPTCHA_THRESHOLD;
 }
 
-// ── Sanitize ─────────────────────────────────────────────────
 function clean(string $val): string
 {
     return htmlspecialchars(
@@ -264,7 +246,6 @@ function client_ip(): string
     return '127.0.0.1';
 }
 
-// ── Audit Log ────────────────────────────────────────────────
 function audit(
     string $action,
     $targetId = null,
@@ -275,9 +256,7 @@ function audit(
         $userId = auth_user()['id'] ?? null;
 
         DB::run(
-            'INSERT INTO audit_log
-             (user_id, action, target_type, target_id, detail, ip_address)
-             VALUES (?,?,?,?,?,?)',
+            'INSERT INTO audit_log (user_id, action, target_type, target_id, detail, ip_address) VALUES (?,?,?,?,?,?)',
             [
                 $userId,
                 $action,
@@ -292,21 +271,15 @@ function audit(
     }
 }
 
-// ── JSON Response ────────────────────────────────────────────
 function json_out(array $data, int $code = 200): never
 {
     http_response_code($code);
     header('Content-Type: application/json; charset=utf-8');
 
-    echo json_encode(
-        $data,
-        JSON_UNESCAPED_UNICODE
-    );
-
+    echo json_encode($data, JSON_UNESCAPED_UNICODE);
     exit;
 }
 
-// ── Flash Messages ───────────────────────────────────────────
 function flash_set(string $type, string $msg): void
 {
     session_secure_start();
@@ -314,7 +287,7 @@ function flash_set(string $type, string $msg): void
     if (session_status() === PHP_SESSION_ACTIVE) {
         $_SESSION['flash'] = [
             'type' => $type,
-            'msg'  => $msg
+            'msg' => $msg
         ];
     }
 }
@@ -332,4 +305,3 @@ function flash_get(): ?array
 
     return $flash;
 }
-```
